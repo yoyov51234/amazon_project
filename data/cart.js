@@ -12,6 +12,15 @@ function saveToStorage() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+export function getCartTotal() {
+  let number = 0;
+  cart.forEach((element) => {
+    number += element.quantity;
+  });
+
+  return number;
+}
+
 export function removeFromCart(productId) {
   //   const index = cart.findIndex((item) => {
   //     return item.productId == productId;
@@ -59,5 +68,11 @@ export function addtoCart(productId) {
     addedEle.classList.remove("added-active");
   }, 2000);
 
+  saveToStorage();
+}
+
+export function updateCartQuantity(productId, quantity) {
+  const item = cart.find((e) => e.productId === productId);
+  item.quantity = quantity;
   saveToStorage();
 }

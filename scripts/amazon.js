@@ -1,4 +1,4 @@
-import { cart, addtoCart } from "../data/cart.js";
+import { cart, addtoCart, getCartTotal } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./untils/money.js";
 //here  we can use alias to name cart to avoid naming conflicts import { cart as myCart} from "../data/cart.js";
@@ -65,21 +65,23 @@ document.querySelector(".products-grid").innerHTML = productsHTML;
 
 // let cart = JSON.parse(localStorage.getItem("cart")) || 0;
 
-function updateCartQuantity() {
-  let cartQuantity = 0;
-  cart.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
-  });
+// function updateCartQuantity() {
+//   let cartQuantity = 0;
+//   cart.forEach((cartItem) => {
+//     cartQuantity += cartItem.quantity;
+//   });
 
-  document.querySelector(".js-cart-quantity").innerText = cartQuantity;
-}
+// }
+
+document.querySelector(".js-cart-quantity").innerText = getCartTotal();
 
 document.querySelectorAll(".js-add-to-cart-button").forEach((item) => {
   item.addEventListener("click", () => {
     const productId = item.dataset.productId;
     // const {productId} = item.dataset; 简写形式
     addtoCart(productId);
-    updateCartQuantity();
+
+    document.querySelector(".js-cart-quantity").innerText = getCartTotal();
   });
 });
 
