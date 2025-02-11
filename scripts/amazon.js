@@ -1,3 +1,6 @@
+import { cart } from "../data/cart.js";
+//here  we can use alias to name cart to avoid naming conflicts import { cart as myCart} from "../data/cart.js";
+
 let productsHTML = "";
 
 products.forEach((product) => {
