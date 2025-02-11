@@ -46,7 +46,7 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart js-add-to-cart-${product.id}">
             <img src="images/icons/checkmark.png" />
             Added
           </div>
@@ -60,23 +60,29 @@ products.forEach((product) => {
 document.querySelector(".products-grid").innerHTML = productsHTML;
 
 // let cart = JSON.parse(localStorage.getItem("cart")) || 0;
+const timers = [];
 
 document.querySelectorAll(".js-add-to-cart-button").forEach((item) => {
   item.addEventListener("click", () => {
     const productId = item.dataset.productId;
+    // const {productId} = item.dataset; 简写形式
+
+    if (timers[productId]) {
+      clearTimeout(timers[productId]);
+    }
 
     const matchingProduct = cart.find((item) => item.productId === productId);
-    const sQuantity = Number(
+    const quantity = Number(
       document.querySelector(`.js-quantity-selector-${productId}`).value
     );
 
     if (!matchingProduct) {
       cart.push({
-        productId,
-        quantity: sQuantity,
+        productId, //同样也是简写形式
+        quantity,
       });
     } else {
-      matchingProduct.quantity += sQuantity;
+      matchingProduct.quantity += quantity;
     }
 
     let cartQuantity = 0;
@@ -86,6 +92,13 @@ document.querySelectorAll(".js-add-to-cart-button").forEach((item) => {
 
     console.log(cartQuantity);
     console.log(cart);
+
+    const addedEle = document.querySelector(`.js-add-to-cart-${productId}`);
+    addedEle.classList.add("added-active");
+
+    timers[productId] = setTimeout(() => {
+      addedEle.classList.remove("added-active");
+    }, 2000);
 
     document.querySelector(".js-cart-quantity").innerText = cartQuantity;
   });
