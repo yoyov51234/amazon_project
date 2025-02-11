@@ -2,9 +2,9 @@ import { cart, removeFromCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./untils/money.js";
 
-let cartSummaryHtml = "";
+// let cartSummaryHtml = "";
 function renderCartHtml() {
-  cartSummaryHtml = "";
+  let cartSummaryHtml = "";
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;
     //   const matchingProduct = products.forEach((product) => {
@@ -83,16 +83,16 @@ function renderCartHtml() {
                   </div>
                 </div>`;
   });
+
+  document.querySelector(".order-summary").innerHTML = cartSummaryHtml;
+  document.querySelectorAll(".js-delete-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      const productId = link.dataset.productId;
+      removeFromCart(productId);
+      renderCartHtml();
+
+      //then remove a productId from the cart
+    });
+  });
 }
 renderCartHtml();
-
-document.querySelector(".order-summary").innerHTML = cartSummaryHtml;
-document.querySelectorAll(".js-delete-link").forEach((link) => {
-  link.addEventListener("click", () => {
-    const productId = link.dataset.productId;
-    removeFromCart(productId);
-    renderCartHtml();
-
-    //then remove a productId from the cart
-  });
-});
