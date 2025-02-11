@@ -1,6 +1,7 @@
-import { cart } from "../data/cart.js";
+import { cart, addtoCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 //here  we can use alias to name cart to avoid naming conflicts import { cart as myCart} from "../data/cart.js";
+//import的另一种语法  import * as cartModule from "../data/cart.js";  这样会把所有在cart.js里面注明export的都import 进来
 
 let productsHTML = "";
 
@@ -64,47 +65,22 @@ products.forEach((product) => {
 document.querySelector(".products-grid").innerHTML = productsHTML;
 
 // let cart = JSON.parse(localStorage.getItem("cart")) || 0;
-const timers = [];
+
+function updateCartQuantity() {
+  let cartQuantity = 0;
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  document.querySelector(".js-cart-quantity").innerText = cartQuantity;
+}
 
 document.querySelectorAll(".js-add-to-cart-button").forEach((item) => {
   item.addEventListener("click", () => {
     const productId = item.dataset.productId;
     // const {productId} = item.dataset; 简写形式
-
-    if (timers[productId]) {
-      clearTimeout(timers[productId]);
-    }
-
-    const matchingProduct = cart.find((item) => item.productId === productId);
-    const quantity = Number(
-      document.querySelector(`.js-quantity-selector-${productId}`).value
-    );
-
-    if (!matchingProduct) {
-      cart.push({
-        productId, //同样也是简写形式
-        quantity,
-      });
-    } else {
-      matchingProduct.quantity += quantity;
-    }
-
-    let cartQuantity = 0;
-    cart.forEach((item) => {
-      cartQuantity += item.quantity;
-    });
-
-    console.log(cartQuantity);
-    console.log(cart);
-
-    const addedEle = document.querySelector(`.js-add-to-cart-${productId}`);
-    addedEle.classList.add("added-active");
-
-    timers[productId] = setTimeout(() => {
-      addedEle.classList.remove("added-active");
-    }, 2000);
-
-    document.querySelector(".js-cart-quantity").innerText = cartQuantity;
+    addtoCart(productId);
+    updateCartQuantity();
   });
 });
 
