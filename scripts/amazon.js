@@ -1,5 +1,6 @@
 import { cart, addtoCart } from "../data/cart.js";
 import { products } from "../data/products.js";
+import { formatCurrency } from "./untils/money.js";
 //here  we can use alias to name cart to avoid naming conflicts import { cart as myCart} from "../data/cart.js";
 //import的另一种语法  import * as cartModule from "../data/cart.js";  这样会把所有在cart.js里面注明export的都import 进来
 
@@ -28,9 +29,7 @@ products.forEach((product) => {
             }</div>
           </div>
 
-          <div class="product-price">${(product.priceCents / 100).toFixed(
-            2
-          )}</div>
+          <div class="product-price">${formatCurrency(product.priceCents)}</div>
 
           <div class="product-quantity-container">
             <select class="js-quantity-selector-${
