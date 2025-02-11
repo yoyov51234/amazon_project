@@ -5,6 +5,14 @@ export const cart = [
 
 const timers = [];
 
+export function removeFromCart(productId) {
+  const index = cart.findIndex((item) => {
+    item.productId === productId;
+  });
+
+  cart.splice(index, 1);
+}
+
 export function addtoCart(productId) {
   if (timers[productId]) {
     clearTimeout(timers[productId]);
