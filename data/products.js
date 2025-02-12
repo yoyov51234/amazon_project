@@ -1,3 +1,5 @@
+import { formatCurrency } from "../scripts/untils/money.js";
+
 export function getProduct(productId) {
   let matchingProduct;
   products.forEach((product) => {
@@ -16,20 +18,20 @@ class Product {
   rating;
   priceCents;
 
-  // constructor(id, image, name, rating, priceCents) {
-  //   this.id = id;
-  //   this.image = image;
-  //   this.rating = rating;
-  //   this.name = name;
-  //   this.priceCents = priceCents;
-  // }
-
   constructor(productDetails) {
     this.id = productDetails.id;
     this.image = productDetails.image;
     this.rating = productDetails.rating;
     this.name = productDetails.name;
     this.priceCents = productDetails.priceCents;
+  }
+
+  getStarsUrl() {
+    return `images/ratings/rating-${this.rating.stars * 10}.png`;
+  }
+
+  getPrice() {
+    return `$${formatCurrency(this.priceCents)}`;
   }
 }
 
@@ -514,4 +516,3 @@ export const products = [
 // console.log(productsList);
 
 // const productsList = products.map((p) => new Product(p));
-console.log(products);

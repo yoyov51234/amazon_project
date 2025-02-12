@@ -13,6 +13,7 @@ import { getProduct } from "../../data/products.js";
 import { formatCurrency } from "../untils/money.js";
 import dayjs from "https://cdn.jsdelivr.net/npm/dayjs@1.11.13/+esm";
 import { renderPaymentSummary } from "./paymentSummary.js";
+
 //esm version of js day
 
 // console.log(dayjs("dddd, M, DD"));
@@ -47,9 +48,7 @@ export function renderOrderSummary() {
         
                       <div class="cart-item-details">
                         <div class="product-name">${matchingProduct.name}</div>
-                        <div class="product-price">$${formatCurrency(
-                          matchingProduct.priceCents
-                        )}</div>
+                        <div class="product-price">${matchingProduct.getPrice()}</div>
                         <div class="product-quantity">
                           <span> Quantity: <span class="quantity-label">${
                             cartItem.quantity
