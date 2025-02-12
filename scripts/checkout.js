@@ -3,6 +3,7 @@ import {
   removeFromCart,
   getCartTotal,
   updateCartQuantity,
+  updateDeliveryOption,
 } from "../data/cart.js";
 import deliveryOptions from "../data/deliveryOptions.js";
 import { products } from "../data/products.js";
@@ -148,51 +149,59 @@ function renderCartHtml() {
       renderCartHtml();
     });
   });
-}
 
-function checkQuantityLimit(quantity) {
-  if (quantity < 0 || quantity > 1000) {
-    alert("The quantity should be in this range [0,1000)");
-    return false;
+  function deliveryOptionsHTML(matchingProduct, cartItem) {
+    let deliverySummaryHtml = "";
+
+    deliveryOptions.forEach((deliverOption) => {
+      const deliveryDate = dayjs()
+        .add(deliverOption.deliveryDays, "days")
+        .format("dddd, MMM DD");
+
+      const price =
+        deliverOption.priceCents === 0
+          ? "Free Shipping "
+          : `$${formatCurrency(deliverOption.priceCents)} Shipping`;
+
+      const isChecked = deliverOption.id === cartItem.deliveryOptionId;
+
+      deliverySummaryHtml += `  <div class="delivery-option js-delivery-option" data-product-id=${
+        matchingProduct.id
+      }  data-option-id=${deliverOption.id}>
+                                    <input type="radio" ${
+                                      isChecked ? "Checked" : ""
+                                    } class="delivery-option-input js-delivery-option-input" name="delivery-option-${
+        matchingProduct.id
+      }">
+                                    <div>
+                                      <div class="delivery-option-date">${deliveryDate}</div>
+                                      <div class="delivery-option-price">${price}</div>
+                                    </div>
+                                </div>`;
+    });
+
+    return deliverySummaryHtml;
   }
-  return true;
-}
 
-function deliveryOptionsHTML(matchingProduct, cartItem) {
-  let deliverySummaryHtml = "";
+  function addEventListenerToOptions() {
+    document.querySelectorAll(".js-delivery-option").forEach((option) => {
+      option.addEventListener("click", () => {
+        const { productId, optionId } = option.dataset;
 
-  deliveryOptions.forEach((deliverOption) => {
-    const deliveryDate = dayjs()
-      .add(deliverOption.deliveryDays, "days")
-      .format("dddd, MMM DD");
+        updateDeliveryOption(productId, optionId);
+        renderCartHtml();
+      });
+    });
+  }
+  addEventListenerToOptions();
 
-    const price =
-      deliverOption.priceCents === 0
-        ? "Free Shipping "
-        : `$${formatCurrency(deliverOption.priceCents)} Shipping`;
-
-    const isChecked = deliverOption.id === cartItem.deliveryOptionId;
-
-    deliverySummaryHtml += `  <div class="delivery-option">
-                                  <input type="radio" ${
-                                    isChecked ? "Checked" : ""
-                                  } class="delivery-option-input js-delivery-option-input" name="delivery-option-${
-      matchingProduct.id
-    }">
-                                  <div>
-                                    <div class="delivery-option-date">${deliveryDate}</div>
-                                    <div class="delivery-option-price">${price}</div>
-                                  </div>
-                              </div>`;
-  });
-
-  console.log(deliverySummaryHtml);
-
-  document.querySelectorAll(".js-delivery-option-input").forEach((button) => {
-    button.addEventListener("click", () => {});
-  });
-
-  return deliverySummaryHtml;
+  function checkQuantityLimit(quantity) {
+    if (quantity < 0 || quantity > 1000) {
+      alert("The quantity should be in this range [0,1000)");
+      return false;
+    }
+    return true;
+  }
 }
 
 renderCartHtml();
