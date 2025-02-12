@@ -5,10 +5,14 @@ import {
   updateCartQuantity,
   updateDeliveryOption,
 } from "../../data/cart.js";
-import deliveryOptions from "../../data/deliveryOptions.js";
-import { products } from "../../data/products.js";
+import {
+  getDeliveryOption,
+  deliveryOptions,
+} from "../../data/deliveryOptions.js";
+import { getProduct } from "../../data/products.js";
 import { formatCurrency } from "../untils/money.js";
 import dayjs from "https://cdn.jsdelivr.net/npm/dayjs@1.11.13/+esm";
+import { renderPaymentSummary } from "./paymentSummary.js";
 //esm version of js day
 
 // console.log(dayjs("dddd, M, DD"));
@@ -25,22 +29,9 @@ export function renderOrderSummary() {
     //   });
     // foreach 没有 返回值， 就算写了return 也没有返回值； 它的返回值是undefined， 所以要用下面这种写法
 
-    let matchingProduct;
-    products.forEach((product) => {
-      if (product.id == productId) {
-        matchingProduct = product;
-      }
-    });
+    const matchingProduct = getProduct(productId);
 
-    let deliveryD;
-
-    const delieryOptionId = cartItem.deliveryOptionId;
-
-    deliveryOptions.forEach((option) => {
-      if (option.id === delieryOptionId) {
-        deliveryD = option;
-      }
-    });
+    const deliveryD = getDeliveryOption(cartItem.deliveryOptionId);
 
     const deliveryDateSummary = dayjs()
       .add(deliveryD.deliveryDays, "days")
@@ -101,7 +92,7 @@ export function renderOrderSummary() {
     link.addEventListener("click", () => {
       const productId = link.dataset.productId;
       removeFromCart(productId);
-      renderCartHtml();
+      renderOrderSummary();
 
       //then remove a productId from the cart
     });
@@ -146,7 +137,8 @@ export function renderOrderSummary() {
         return;
       }
       updateCartQuantity(productId, updatedQuantity);
-      renderCartHtml();
+      renderOrderSummary();
+      renderPaymentSummary();
     });
   });
 
@@ -190,6 +182,7 @@ export function renderOrderSummary() {
 
         updateDeliveryOption(productId, optionId);
         renderOrderSummary();
+        renderPaymentSummary();
       });
     });
   }
