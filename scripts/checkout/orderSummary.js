@@ -93,6 +93,7 @@ export function renderOrderSummary() {
       const productId = link.dataset.productId;
       removeFromCart(productId);
       renderOrderSummary();
+      renderPaymentSummary();
 
       //then remove a productId from the cart
     });
