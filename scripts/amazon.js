@@ -6,6 +6,8 @@ import { products } from "../data/products.js";
 let productsHTML = "";
 
 products.forEach((product) => {
+  const isShow = product.type === "clothing" ? "display" : "hidden";
+
   productsHTML += `  <div class="product-container">
           <div class="product-image-container">
             <img
@@ -53,6 +55,9 @@ products.forEach((product) => {
             <img src="images/icons/checkmark.png" />
             Added
           </div>
+          <div class="size-chart-link js-size-chart-link ${isShow}"> <a href="${
+    product.sizeChartLink
+  }" target ="_blank">Size Chart</a> </div>
 
           <button class="add-to-cart-button js-add-to-cart-button button-primary" data-product-id="${
             product.id

@@ -144,6 +144,14 @@
   opacity: 0;
 }
 
+.hidden {
+  display: none;
+}
+
+.display {
+  display: initial;
+}
+
 .added-active {
   opacity: 1;
 }
