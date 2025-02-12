@@ -2,15 +2,15 @@
 class Cart {
   cartItems = undefined; // this is how we add a property to a class
   timers = undefined;
-  localStorageKey = undefined;
+  #localStorageKey = undefined; // same as localstorage;
 
   constructor(localStorageKey) {
-    this.localStorageKey = localStorageKey;
-    this.loadFromlocalStorage();
+    this.#localStorageKey = localStorageKey;
+    this.#loadFromlocalStorage();
   }
 
-  loadFromlocalStorage() {
-    this.cartItems = JSON.parse(localStorage.getItem(this.localStorageKey));
+  #loadFromlocalStorage() {
+    this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey));
     if (!this.cartItems) {
       this.cartItems = [
         {
@@ -28,7 +28,7 @@ class Cart {
   }
 
   saveToStorage() {
-    localStorage.setItem(this.localStorageKey, JSON.stringify(this.cartItems));
+    localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
   }
   getCartTotal() {
     let number = 0;
